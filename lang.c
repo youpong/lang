@@ -9,12 +9,17 @@ noreturn static void error() {
   exit(EXIT_FAILURE);
 }
 
+static void skip() {
+  while (isspace(*p))
+    p++;
+}
+
 static int eval() {
   int val;
 
   if (isdigit(*p)) {
     val = *p++ - '0';
-    while (*p) {
+    while (isdigit(*p)) {
       val = val * 10 + *p++ - '0';
     }
     return val;
@@ -26,9 +31,13 @@ static int eval() {
 int main(int argc, char **argv) {
   p = argv[1];
 
+  char *delim = "";
   while (*p) {
-    printf("%d\n", eval());
+    skip();
+    printf("%s%d", delim, eval());
+    delim = " ";
   }
+  printf("\n");
 
   return EXIT_SUCCESS;
 }
