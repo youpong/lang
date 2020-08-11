@@ -8,6 +8,9 @@ static int eval() {
 
   if (isdigit(*p)) {
     val = *p++ - '0';
+    while (*p) {
+      val = val * 10 + *p++ - '0';
+    }
   }
 
   return val;
