@@ -19,6 +19,7 @@ runtest '1 2 3' '1 2 3' "Error: $LINENO"
 
 runtest   3 '+ 1 2'             "Error: $LINENO"
 runtest   6 '+ + 1 2 3'         "Error: $LINENO"
+runtest   6 '++1 2 3'           "Error: $LINENO"
 
 runtest   1 '- 5 4'             "Error: $LINENO"
 runtest  -9 '- 6 + 7 8'         "Error: $LINENO"

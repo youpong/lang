@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdnoreturn.h>
+#include <string.h>
 
 static char *p;
 
@@ -39,29 +40,23 @@ static int eval() {
     return val;
   }
 
-  int op1, op2;
-  if (*p == '+') {
-    p++;
-    op1 = eval();
-    op2 = eval();
-    return op1 + op2;
-  } else if (*p == '-') {
-    p++;
-    op1 = eval();
-    op2 = eval();
-    return op1 - op2;
-  } else if (*p == '*') {
-    p++;
-    op1 = eval();
-    op2 = eval();
-    return op1 * op2;
-  } else if (*p == '/') {
-    p++;
-    op1 = eval();
-    if ((op2 = eval()) == 0) {
-      error("divided by 0");
+  if (strchr("+-*/", *p) != NULL) {
+    char op = *p++;
+    int op1 = eval();
+    int op2 = eval();
+    switch (op) {
+    case '+':
+      return op1 + op2;
+    case '-':
+      return op1 - op2;
+    case '*':
+      return op1 * op2;
+    case '/':
+      if (op2 == 0) {
+        error("divided by 0");
+      }
+      return op1 / op2;
     }
-    return op1 / op2;
   }
 
   error("invalid character: %c", *p);
