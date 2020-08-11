@@ -39,17 +39,23 @@ static int eval() {
     return val;
   }
 
+  int op1, op2;
   if (*p == '+') {
     p++;
-    return eval() + eval();
+    op1 = eval();
+    op2 = eval();
+    return op1 + op2;
   } else if (*p == '-') {
     p++;
-    return eval() - eval();
+    op1 = eval();
+    op2 = eval();
+    return op1 - op2;
   } else if (*p == '*') {
     p++;
-    return eval() * eval();
+    op1 = eval();
+    op2 = eval();
+    return op1 * op2;
   } else if (*p == '/') {
-    int op1, op2;
     p++;
     op1 = eval();
     if ((op2 = eval()) == 0) {
