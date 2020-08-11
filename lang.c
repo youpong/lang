@@ -38,6 +38,20 @@ static int eval() {
   if (*p == '+') {
     p++;
     return eval() + eval();
+  } else if (*p == '-') {
+    p++;
+    return eval() - eval();
+  } else if (*p == '*') {
+    p++;
+    return eval() * eval();
+  } else if (*p == '/') {
+    int op1, op2;
+    p++;
+    op1 = eval();
+    if ((op2 = eval()) == 0) {
+      error("divided by 0");
+    }
+    return op1 / op2;
   }
 
   error("invalid character: %c", *p);
