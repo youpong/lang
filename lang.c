@@ -1,11 +1,19 @@
 #include <ctype.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
 static char *p;
 
-noreturn static void error() {
+noreturn static void error(char *fmt, ...) {
+  va_list ap;
+
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n");
+  va_end(ap);
+
   exit(EXIT_FAILURE);
 }
 
@@ -25,7 +33,7 @@ static int eval() {
     return val;
   }
 
-  error();
+  error("invalid character: %c", *p);
 }
 
 int main(int argc, char **argv) {
