@@ -1,16 +1,24 @@
+#include <ctype.h>
 #include <stdio.h>
 
+char *p;
+
 static int eval() {
-  return 0;
+  int val;
+
+  if (isdigit(*p)) {
+    val = *p++ - '0';
+  }
+
+  return val;
 }
 
 int main(int argc, char **argv) {
-  char **p;
-  p= &argv[1];
-  
-  for (;*p; p++) {
+  p = argv[1];
+
+  while (*p) {
     printf("%d\n", eval());
   }
-  
+
   return 0;
 }
