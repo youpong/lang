@@ -27,6 +27,10 @@ static int eval() {
 
   skip();
 
+  if (*p == '\0') {
+    error("Error: token expected");
+  }
+
   if (isdigit(*p)) {
     val = *p++ - '0';
     while (isdigit(*p)) {
@@ -58,6 +62,10 @@ static int eval() {
 }
 
 int main(int argc, char **argv) {
+  if (argc == 1) {
+    error("no input program");
+  }
+
   p = argv[1];
 
   char *delim = "";

@@ -39,6 +39,10 @@ runtest   0 '/  0 17'           "Error: $LINENO"
 
 ./lang a 2>/dev/null && error "Error: accept digit only"
 
+./lang '+ 1' 2>/dev/null && error "Error: must not null"
+
+./lang 2>/dev/null && error "Error: no input program"
+
 rm tmp.{0,1}
 
 echo "Okay."
