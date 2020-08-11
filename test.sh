@@ -17,6 +17,8 @@ runtest  0  0 "Error: $LINENO"
 runtest 42 42 "Error: $LINENO"
 runtest '1 2 3' '1 2 3' "Error: $LINENO"
 
+runtest 3 '+ 1 2' "Error: $LINENO"
+
 ./lang a 2>/dev/null && error "Error: accept digit only"
 
 rm tmp.{0,1}

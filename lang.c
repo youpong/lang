@@ -25,12 +25,19 @@ static void skip() {
 static int eval() {
   int val;
 
+  skip();
+
   if (isdigit(*p)) {
     val = *p++ - '0';
     while (isdigit(*p)) {
       val = val * 10 + *p++ - '0';
     }
     return val;
+  }
+
+  if (*p == '+') {
+    p++;
+    return eval() + eval();
   }
 
   error("invalid character: %c", *p);
@@ -41,7 +48,6 @@ int main(int argc, char **argv) {
 
   char *delim = "";
   while (*p) {
-    skip();
     printf("%s%d", delim, eval());
     delim = " ";
   }
