@@ -31,6 +31,12 @@ runtest   3 '/ 15 5'            "Error: $LINENO"
 runtest   2 '/ 16 6'            "Error: $LINENO"
 runtest   0 '/  0 17'           "Error: $LINENO"
 
+# Functions
+runtest   2 'F[+ . .] F(1)'       "Error: $LINENO"
+runtest  10 'F[* . 2] F(5)'       "Error: $LINENO"
+runtest  16 'F[* . .] F(F(2))'    "Error: $LINENO"
+runtest 256 'F[* . .] F(F(F(2)))' "Error: $LINENO"
+
 #
 # Error
 # 
