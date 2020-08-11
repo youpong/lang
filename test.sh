@@ -32,12 +32,14 @@ runtest   2 '/ 16 6'            "Error: $LINENO"
 runtest   0 '/  0 17'           "Error: $LINENO"
 
 # Functions
+runtest   1 'F[.]     F(1)'       "Error: $LINENO"
 runtest   2 'F[+ . .] F(1)'       "Error: $LINENO"
-runtest  10 'F[* . 2] F(5)'       "Error: $LINENO"
-runtest  16 'F[* . .] F(F(2))'    "Error: $LINENO"
+runtest  36 'F[* . 2] F(18)'      "Error: $LINENO"
 runtest 256 'F[* . .] F(F(F(2)))' "Error: $LINENO"
 
-#
+runtest 321 'F[* . .] G[+ . .] - F(19) G(20)' "$LINENO"
+runtest  42 'F[+ . .] G[F(.)]  G(21)'         "$LINENO"
+
 # Error
 # 
 # divided by 0
@@ -49,6 +51,12 @@ runtest 256 'F[* . .] F(F(F(2)))' "Error: $LINENO"
 ./lang '+ 1' 2>/dev/null && error "Error: must not null"
 
 ./lang 2>/dev/null && error "Error: no input program"
+
+./lang 'F[' 2>/dev/null \
+    && error "Error: expect ']' before EOF"
+
+./lang 'F[.] F(2]' 2>/dev/null \
+    && error "Error: ')' expected: \"]]\""       
 
 rm tmp.{0,1}
 
