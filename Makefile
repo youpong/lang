@@ -1,5 +1,5 @@
-CC = gcc
-CFLAGS = -g -Wall -std=c17
+CC = clang
+CFLAGS = -g -Wall -std=c18
 
 TARGET = lang
 .PHONY: all clean format check

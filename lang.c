@@ -1,7 +1,13 @@
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdnoreturn.h>
 
-char *p;
+static char *p;
+
+noreturn static void error() {
+  exit(EXIT_FAILURE);
+}
 
 static int eval() {
   int val;
@@ -11,9 +17,10 @@ static int eval() {
     while (*p) {
       val = val * 10 + *p++ - '0';
     }
+    return val;
   }
 
-  return val;
+  error();
 }
 
 int main(int argc, char **argv) {
@@ -23,5 +30,5 @@ int main(int argc, char **argv) {
     printf("%d\n", eval());
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
