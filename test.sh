@@ -7,12 +7,18 @@ function error() {
     exit 1
 }
 
-cmp <(echo  0) <(./lang  0) || echo "Error: $LINENO"
-cmp <(echo  1) <(./lang  1) || echo "Error: $LINENO"
-cmp <(echo 42) <(./lang 42) || echo "Error: $LINENO"
+function runtest() {
+    echo -e "$1" > tmp.0
+    ./lang "$2" > tmp.1
+    cmp tmp.0 tmp.1 || error "$3"
+}
 
-cmp <(echo -e 1 2 3) <(./lang '1 2 3') || echo "Error: $LINENO"
+runtest  0  0 "Error: $LINENO"
+runtest 42 42 "Error: $LINENO"
+runtest '1 2 3' '1 2 3' "Error: $LINENO"
 
-./lang a && echo "Error: accept digit only"
+./lang a 2>/dev/null && error "Error: accept digit only"
 
-echo "Ok." 
+rm tmp.{0,1}
+
+echo "Okay."
