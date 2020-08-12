@@ -5,7 +5,7 @@
 #include <stdnoreturn.h>
 #include <string.h>
 
-static int eval(int arg);
+static int eval(int *args);
 
 static char *p;
 static char func[26][99 + 1];
@@ -43,15 +43,15 @@ static void skip() {
     p++;
 }
 
-static int eval_string(char *code, int arg) {
+static int eval_string(char *code, int *args) {
   char *orig = p;
   p = code;
-  int val = eval(arg);
+  int val = eval(args);
   p = orig;
   return val;
 }
 
-static int eval(int arg) {
+static int eval(int *args) {
   int val;
 
   skip();
@@ -61,9 +61,11 @@ static int eval(int arg) {
   }
 
   // Functoin parameter
-  if (*p == '.') {
-    p++;
-    return arg;
+  if ('a' <= *p && *p <= 'z') {
+    if (args == NULL)
+      error("cannot access var: %c", *p);
+
+    return args[*p++ - 'a'];
   }
 
   // Function definition
@@ -71,16 +73,20 @@ static int eval(int arg) {
     char name = *p;
     p += 2;
     read_until(']', func[name - 'A']);
-    return eval(arg);
+    return eval(args);
   }
 
   // Function application
   if ('A' <= *p && *p <= 'Z' && *(p + 1) == '(') {
+    int newargs[26];
     char name = *p;
     p += 2;
-    int newarg = eval(arg);
+
+    int i = 0;
+    for (skip(); *p != ')'; skip())
+      newargs[i++] = eval(args);
     expect(')');
-    return eval_string(func[name - 'A'], newarg);
+    return eval_string(func[name - 'A'], newargs);
   }
 
   if (isdigit(*p)) {
@@ -93,8 +99,8 @@ static int eval(int arg) {
 
   if (strchr("+-*/", *p) != NULL) {
     char op = *p++;
-    int op1 = eval(arg);
-    int op2 = eval(arg);
+    int op1 = eval(args);
+    int op2 = eval(args);
     switch (op) {
     case '+':
       return op1 + op2;
@@ -122,7 +128,7 @@ int main(int argc, char **argv) {
 
   char *delim = "";
   while (*p) {
-    printf("%s%d", delim, eval(0));
+    printf("%s%d", delim, eval(NULL));
     delim = " ";
   }
   printf("\n");
