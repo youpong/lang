@@ -1,9 +1,6 @@
 #include "lang.h"
 #include <ctype.h>
-#include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdnoreturn.h>
 #include <string.h>
 
 static char func[26][99 + 1];
