@@ -32,13 +32,14 @@ runtest   2 '/ 16 6'            "Error: $LINENO"
 runtest   0 '/  0 17'           "Error: $LINENO"
 
 # Functions
+runtest  32 'F[32]    F()'        "Error: $LINENO"     
 runtest   1 'F[a]     F(1)'       "Error: $LINENO"
 runtest  36 'F[* a 2] F(18)'      "Error: $LINENO"
 runtest 256 'F[* a a] F(F(F(2)))' "Error: $LINENO"
 
 runtest 321 'F[* a  a] G[+ a a] - F(19) G(20)' "$LINENO"
 runtest  42 'F[+ a  a] G[F(a)]       G(21)'    "$LINENO"
-runtest  12 'F[+a 22] G[F(*a 23)] /G(24)F(25)' "$LINENO"
+runtest  12 'F[+a 22]G[F(*a 23)] /G(24)F(25)'  "$LINENO"
 
 runtest  53 'F[+ a b] F(26 27)'       "Error: $LINENO"
 runtest 751 'F[* a b] G[+ a b] - F(28 29) G(30 31)' "$LINENO"
