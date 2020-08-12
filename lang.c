@@ -44,9 +44,12 @@ static void skip() {
 }
 
 static int eval_string(char *code, int *args) {
+  int val;
   char *orig = p;
   p = code;
-  int val = eval(args);
+  while (*p) {
+    val = eval(args);
+  }
   p = orig;
   return val;
 }
@@ -66,6 +69,16 @@ static int eval(int *args) {
       error("cannot access var: %c", *p);
 
     return args[*p++ - 'a'];
+  }
+
+  // Build-in
+  if ('P' == *p) {
+    p++;
+    expect('(');
+    int val = eval(args);
+    expect(')');
+    printf("%d\n", val);
+    return val;
   }
 
   // Function definition
