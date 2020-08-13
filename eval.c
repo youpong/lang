@@ -55,7 +55,7 @@ int eval(int *args) {
     return args[*p++ - 'a'];
   }
 
-  // Build-in
+  // Build-in function P
   if ('P' == *p) {
     p++;
     expect('(');
@@ -79,9 +79,9 @@ int eval(int *args) {
     char name = *p;
     p += 2;
 
-    int i = 0;
-    for (skip(); *p != ')'; skip())
-      newargs[i++] = eval(args);
+    for (int *arg = newargs; *p != ')'; arg++)
+      *arg = eval(args);
+
     expect(')');
     return eval_string(func[name - 'A'], newargs);
   }
