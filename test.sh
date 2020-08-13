@@ -31,18 +31,26 @@ runtest   3 '/ 15 5'            "$LINENO"
 runtest   2 '/ 16 6'            "$LINENO"
 runtest   0 '/  0 17'           "$LINENO"
 
+#
 # Functions
+#
 runtest  32 'F[32]    F()'        "$LINENO"     
 runtest   1 'F[a]     F(1)'       "$LINENO"
 runtest  36 'F[* a 2] F(18)'      "$LINENO"
-runtest 256 'F[* a a] F(F(F(2)))' "$LINENO"
+runtest 321 'F[* a  a] G[+ a a]  -F(19) G(20)' "$LINENO"
 
-runtest 321 'F[* a  a] G[+ a a] - F(19) G(20)' "$LINENO"
-runtest  42 'F[+ a  a] G[F(a)]       G(21)'    "$LINENO"
+# Function can define include func-call
+runtest  42 'F[+a a] G[F(a)]      G(21)'       "$LINENO"
 runtest  12 'F[+a 22]G[F(*a 23)] /G(24)F(25)'  "$LINENO"
 
 runtest  53 'F[+ a b] F(26 27)'                     "$LINENO"
 runtest 751 'F[* a b] G[+ a b] - F(28 29) G(30 31)' "$LINENO"
+
+# nested func call
+runtest  256 'F[* a a]        F(F(F(2)))'        "$LINENO"
+runtest  107 'F[+36a] G[35]   F(F(G()))'         "$LINENO"
+runtest 1090 'F[+34a] G[*a33] F(G(32))'          "$LINENO"
+runtest  146 'F[+ab]  G[*ab]  F(G(37 3) G(5 7))' "$LINENO"
 
 # Error
 # 

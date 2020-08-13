@@ -3,5 +3,5 @@
 
 extern char *p;
 
-int eval(int *args);
+int eval();
 noreturn void error(char *fmt, ...);

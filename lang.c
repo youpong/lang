@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
   int val;
   while (*p) {
-    val = eval(NULL);
+    val = eval();
   }
   printf("%d\n", val);
 

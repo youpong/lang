@@ -3,18 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
-static char func[26][99 + 1];
+static int eval_expr(int *args);
 
-static void read_until(char c, char *buf) {
-  while (*p != c && *p != '\0') {
-    *buf++ = *p++;
-  }
-  if (*p == '\0') {
-    error("expected ']' before EOF");
-  }
-  p++;
-  *buf = '\0';
-}
+static char func[26][99 + 1];
 
 static void expect(char c) {
   if (*p != c)
@@ -27,20 +18,39 @@ static void skip() {
     p++;
 }
 
+static void read_until(char c, char *buf) {
+  while (*p != c && *p != '\0') {
+    *buf++ = *p++;
+  }
+  if (*p == '\0') {
+    error("expected ']' before EOF");
+  }
+  p++;
+  *buf = '\0';
+}
+
 static int eval_string(char *code, int *args) {
   int val;
   char *orig = p;
   p = code;
   while (*p) {
-    val = eval(args);
+    val = eval_expr(args);
   }
   p = orig;
   return val;
 }
 
-int eval(int *args) {
-  skip();
+/*
+ * Function definition
+ */
+static void eval_func_def() {
+  char name = *p;
+  p += 2;
+  read_until(']', func[name - 'A']);
+}
 
+static int eval_expr(int *args) {
+  skip();
   if (*p == '\0') {
     error("Error: token expected");
   }
@@ -57,18 +67,10 @@ int eval(int *args) {
   if ('P' == *p) {
     p++;
     expect('(');
-    int val = eval(args);
+    int val = eval_expr(args);
     expect(')');
     printf("%d\n", val);
     return val;
-  }
-
-  // Function definition
-  if ('A' <= *p && *p <= 'Z' && *(p + 1) == '[') {
-    char name = *p;
-    p += 2;
-    read_until(']', func[name - 'A']);
-    return 0;
   }
 
   // Function application
@@ -78,7 +80,7 @@ int eval(int *args) {
     p += 2;
 
     for (int *arg = newargs; *p != ')'; arg++)
-      *arg = eval(args);
+      *arg = eval_expr(args);
 
     expect(')');
     return eval_string(func[name - 'A'], newargs);
@@ -94,8 +96,8 @@ int eval(int *args) {
 
   if (strchr("+-*/", *p) != NULL) {
     char op = *p++;
-    int op1 = eval(args);
-    int op2 = eval(args);
+    int op1 = eval_expr(args);
+    int op2 = eval_expr(args);
     switch (op) {
     case '+':
       return op1 + op2;
@@ -111,5 +113,14 @@ int eval(int *args) {
     }
   }
 
-  error("invalid character: %c", *p);
+  error("Syntax error: %c", *p);
+}
+
+int eval() {
+  skip();
+  if ('A' <= *p && *p <= 'Z' && *(p + 1) == '[') {
+    eval_func_def();
+    return 0;
+  }
+  return eval_expr(NULL);
 }
