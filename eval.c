@@ -23,7 +23,7 @@ static void read_until(char c, char *buf) {
     *buf++ = *p++;
   }
   if (*p == '\0') {
-    error("expected ']' before EOF");
+    error("expected '%c' before EOF", c);
   }
   p++;
   *buf = '\0';
@@ -42,23 +42,25 @@ static int eval_string(char *code, int *args) {
 
 /*
  * Function definition
+ * NAME '[' body ']'
  */
 static void eval_func_def() {
-  char name = *p;
-  p += 2;
+  char name = *p++;
+  expect('[');
   read_until(']', func[name - 'A']);
 }
 
 static int eval_expr(int *args) {
   skip();
+
   if (*p == '\0') {
-    error("Error: token expected");
+    error("Error: token expected before EOF");
   }
 
   // Functoin parameter
   if ('a' <= *p && *p <= 'z') {
     if (args == NULL)
-      error("cannot access var: %c", *p);
+      error("Undefined variable: %c", *p);
 
     return args[*p++ - 'a'];
   }
@@ -76,8 +78,8 @@ static int eval_expr(int *args) {
   // Function application
   if ('A' <= *p && *p <= 'Z' && *(p + 1) == '(') {
     int newargs[26];
-    char name = *p;
-    p += 2;
+    char name = *p++;
+    expect('(');
 
     for (int *arg = newargs; *p != ')'; arg++)
       *arg = eval_expr(args);
@@ -113,7 +115,7 @@ static int eval_expr(int *args) {
     }
   }
 
-  error("Syntax error: %c", *p);
+  error("Syntax error: %s", p);
 }
 
 int eval() {
