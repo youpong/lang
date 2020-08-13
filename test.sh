@@ -15,7 +15,7 @@ function runtest() {
 
 runtest  0  0           "$LINENO"
 runtest 42 42           "$LINENO"
-runtest '1 2 3' '1 2 3' "$LINENO"
+runtest 3 '1 2 3'       "$LINENO"
 
 runtest   3 '+ 1 2'             "$LINENO"
 runtest   6 '+ + 1 2 3'         "$LINENO"
@@ -50,14 +50,13 @@ runtest 751 'F[* a b] G[+ a b] - F(28 29) G(30 31)' "$LINENO"
 ./lang '/ 18 0'     2>/dev/null && error "$LINENO"
 ./lang '/ 19 - 7 7' 2>/dev/null && error "$LINENO"
 
-./lang a 2>/dev/null && error "accept digit only"
+./lang a 2>/dev/null     && error "accept digit only"
 
 ./lang '+ 1' 2>/dev/null && error "must not null"
 
-./lang 2>/dev/null && error "no input program"
+./lang 2>/dev/null       && error "no input program"
 
-./lang 'F[' 2>/dev/null \
-    && error "expect ']' before EOF"
+./lang 'F[' 2>/dev/null  && error "expect ']' before EOF"
 
 ./lang 'F[.] F(2]' 2>/dev/null \
     && error "')' expected: \"]]\""       

@@ -39,8 +39,6 @@ static int eval_string(char *code, int *args) {
 }
 
 int eval(int *args) {
-  int val;
-
   skip();
 
   if (*p == '\0') {
@@ -70,7 +68,7 @@ int eval(int *args) {
     char name = *p;
     p += 2;
     read_until(']', func[name - 'A']);
-    return eval(args);
+    return 0;
   }
 
   // Function application
@@ -87,7 +85,7 @@ int eval(int *args) {
   }
 
   if (isdigit(*p)) {
-    val = *p++ - '0';
+    int val = *p++ - '0';
     while (isdigit(*p)) {
       val = val * 10 + *p++ - '0';
     }

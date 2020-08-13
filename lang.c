@@ -23,12 +23,11 @@ int main(int argc, char **argv) {
 
   p = argv[1];
 
-  char *delim = "";
+  int val;
   while (*p) {
-    printf("%s%d", delim, eval(NULL));
-    delim = " ";
+    val = eval(NULL);
   }
-  printf("\n");
+  printf("%d\n", val);
 
   return EXIT_SUCCESS;
 }
